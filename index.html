@@ -1,0 +1,519 @@
+<!DOCTYPE html>
+<html lang="en">
+<head>
+  <meta charset="UTF-8" />
+  <title>AwanCore – Core Infrastructure</title>
+  <meta name="viewport" content="width=device-width, initial-scale=1.0" />
+  <meta name="description" content="AwanCore is core infrastructure built for virtualization." />
+
+<link rel="icon" type="image/png" href="/src/favicon-96x96.png" sizes="96x96" />
+<link rel="icon" type="image/svg+xml" href="/src/favicon.svg" />
+<link rel="shortcut icon" href="/src/favicon.ico" />
+<link rel="apple-touch-icon" sizes="180x180" href="/src/apple-touch-icon.png" />
+<link rel="manifest" href="/src/site.webmanifest" />
+
+  <script src="https://cdn.tailwindcss.com"></script>
+  <link rel="stylesheet" href="https://cdnjs.cloudflare.com/ajax/libs/font-awesome/6.5.1/css/all.min.css" />
+
+  <script>
+    tailwind.config = {
+      theme: {
+        extend: {
+          colors: {
+            primary: '#2563EB',
+            dark: '#0F172A'
+          }
+        }
+      }
+    }
+  </script>
+
+  <style>
+       @keyframes float {
+      0%, 100% { transform: translateY(0px); }
+      50% { transform: translateY(-10px); }
+    }
+    
+    @keyframes glow {
+      0%, 100% { box-shadow: 0 0 5px rgba(37, 99, 235, 0.5); }
+      50% { box-shadow: 0 0 20px rgba(37, 99, 235, 0.8); }
+    }
+    
+    @keyframes fadeInUp {
+      from { opacity: 0; transform: translateY(30px); }
+      to { opacity: 1; transform: translateY(0); }
+    }
+    
+    @keyframes pulse {
+      0%, 100% { opacity: 1; }
+      50% { opacity: 0.5; }
+    }
+    
+    .animate-float { animation: float 3s ease-in-out infinite; }
+    .animate-glow { animation: glow 2s ease-in-out infinite; }
+    .animate-fadeInUp { animation: fadeInUp 0.6s ease-out forwards; }
+    .animate-pulse { animation: pulse 2s cubic-bezier(0.4, 0, 0.6, 1) infinite; }
+    
+    .gradient-text {
+      background: linear-gradient(135deg, #3B82F6 0%, #60A5FA 50%, #93C5FD 100%);
+      -webkit-background-clip: text;
+      -webkit-text-fill-color: transparent;
+      background-clip: text;
+    }
+    
+    .gradient-bg {
+      background: linear-gradient(135deg, #0F172A 0%, #1E293B 50%, #334155 100%);
+    }
+    .cta-btn {
+      @apply border border-slate-700 px-4 py-2 rounded-lg hover:bg-slate-800 transition;
+    }
+.os-btn {
+  @apply p-4 border border-slate-700 rounded-lg hover:bg-primary transition text-slate-200 flex items-center justify-center;
+}
+.os-btn.active {
+  @apply bg-primary text-white border-primary;
+}
+ /* Smooth scroll */
+    html {
+      scroll-behavior: smooth;
+    }
+    
+    /* Custom scrollbar */
+    ::-webkit-scrollbar {
+      width: 8px;
+    }
+    
+    ::-webkit-scrollbar-track {
+      background: #0F172A;
+    }
+    
+    ::-webkit-scrollbar-thumb {
+      background: #334155;
+      border-radius: 4px;
+    }
+    
+    ::-webkit-scrollbar-thumb:hover {
+      background: #475569;
+    }
+
+</style>
+</head>
+
+<body class="bg-dark text-slate-200 antialiased">
+
+  <!-- Animated background elements -->
+  <div class="fixed inset-0 overflow-hidden pointer-events-none z-0">
+  <div class="absolute -top-10 -left-10 w-64 h-64 bg-blue-500/10 rounded-full blur-3xl animate-float"></div>
+  <div class="absolute top-1/2 -right-10 w-96 h-96 bg-indigo-500/10 rounded-full blur-3xl animate-float" style="animation-delay: -1s;"></div>
+  <div class="absolute -bottom-10 left-1/3 w-80 h-80 bg-purple-500/10 rounded-full blur-3xl animate-float" style="animation-delay: -2s;"></div>
+</div>
+
+<!-- HEADER -->
+<header class="border-b border-slate-800 sticky top-0 bg-dark z-40">
+  <div class="max-w-7xl mx-auto px-6 py-4 flex items-center justify-between">
+
+    <!-- Logo -->
+    <div class="text-xl font-semibold tracking-wide">
+      <span class="text-primary">Awan</span>Core
+    </div>
+
+    <!-- Desktop Menu -->
+    <nav class="hidden md:flex items-center gap-8 text-sm w-full">
+      <div class="flex gap-8 mx-auto text-center">
+        <a href="#product" class="hover:text-primary transition">Produk</a>
+      <a href="#features" class="hover:text-primary transition">Fitur</a>
+        <a href="#pricing" class="hover:text-primary transition">Harga</a>
+        <a href="#os-support" class="hover:text-primary transition">Oprasi Sistem</a>
+        <a href="#contact" class="hover:text-primary transition">Contact</a>
+      </div>
+      <a href="#order" class="bg-primary text-white px-4 py-2 rounded-lg cta-btn ml-auto">Pesan</a>
+    </nav>
+
+    <!-- Hamburger -->
+    <div class="md:hidden flex items-center">
+      <button id="hamburgerBtn" class="text-slate-300 text-2xl focus:outline-none">
+        <i class="fa fa-bars"></i>
+      </button>
+    </div>
+
+  </div>
+
+  <!-- Mobile Menu -->
+  <div id="mobileMenu" class="hidden md:hidden bg-dark border-t border-slate-800">
+    <nav class="flex flex-col px-6 py-4 gap-4 text-sm">
+      <a href="#product" class="hover:text-primary transition">Produk</a>
+      <a href="#features" class="hover:text-primary transition">Fitur</a>
+      <a href="#pricing" class="hover:text-primary transition">Harga</a>
+      <a href="#os-support" class="hover:text-primary transition">Oprasi Sistem</a>
+      <a href="#contact" class="hover:text-primary transition">Contact</a>
+      <a href="#order" class="bg-primary text-white px-4 py-2 rounded-lg text-center hover:bg-blue-500 transition">Pesan</a>
+    </nav>
+  </div>
+</header>
+
+<!-- HERO -->
+<section class="max-w-7xl mx-auto px-6 py-28">
+  <div class="md:flex md:items-start md:justify-between gap-12">
+
+    <!-- KIRI: Judul & Deskripsi -->
+    <div class="md:w-1/2">
+      <h1 class="text-4xl md:text-5xl font-bold leading-tight">
+        Core Infrastructure<br />
+        <span class="text-primary">Built for Virtualization</span>
+      </h1>
+
+      <p class="mt-6 max-w-xl text-slate-400 text-lg">
+        AwanCore menyediakan infrastruktur inti berbasis KVM dan VPS NAT
+        untuk lab, small production, dan eksperimen jaringan. Setiap server kami
+        dioptimalkan untuk performa, stabilitas, dan keamanan.
+      </p>
+
+      <div class="mt-10 flex gap-4">
+        <a
+          href="#pricing"
+          class="bg-primary text-white px-6 py-3 rounded-lg font-medium hover:bg-blue-500 transition"
+        >
+          Lihat Harga
+        </a>
+      </div>
+    </div>
+
+    <!-- Spesifikasi Server -->
+    <div class="md:w-1/2 mt-10 md:mt-0">
+      <div class="bg-slate-900 border border-slate-800 rounded-xl p-6 max-w-md mx-auto shadow-lg">
+        <h3 class="text-xl font-semibold mb-4 text-center">Spesifikasi Server</h3>
+        
+        <div class="space-y-3 text-sm text-slate-400">
+          <p class="flex justify-between">
+            <span>vCPU</span>
+            <span>16 Core (Intel Xeon / AMD EPYC)</span>
+          </p>
+          <p class="flex justify-between">
+            <span>RAM</span>
+            <span>1024 GB DDR4 ECC</span>
+          </p>
+          <p class="flex justify-between">
+            <span>Storage</span>
+            <span>10 TB NVMe SSD</span>
+          </p>
+          <p class="flex justify-between">
+            <span>Network</span>
+            <span>10 Gbps Shared</span>
+          </p>
+          <p class="flex justify-between">
+            <span>IP Publik</span>
+            <span>5 / VPS dengan NAT</span>
+          </p>
+        </div>
+
+        <div class="mt-6 text-center">
+          <span class="text-sm text-slate-500">Infrastruktur kami siap mendukung VPS dengan performa tinggi dan stabil.</span>
+        </div>
+      </div>
+    </div>
+
+  </div>
+</section>
+
+
+<!-- PRODUCT -->
+<section id="product" class="max-w-7xl mx-auto px-6 py-24">
+  <div class="md:flex md:items-start md:justify-between gap-12">
+
+    <!-- KIRI: Judul & Deskripsi -->
+    <div class="md:w-1/2">
+      <h2 class="text-3xl font-bold">Apa itu AwanCore?</h2>
+      <p class="mt-4 max-w-xl text-slate-400">
+AwanCore adalah platform ringan untuk menjalankan VPS dengan jaringan bersama. Dirancang khusus untuk developer, system administrator, dan mahasiswa yang membutuhkan infrastruktur virtual yang handal tanpa kompleksitas cloud besar.
+      </p>
+    </div>
+
+    <!-- KANAN: Info VPS Aktif / Support -->
+    <div class="md:w-1/2 mt-10 md:mt-0">
+      <div class="bg-slate-900 border border-slate-800 rounded-xl p-6 max-w-md mx-auto shadow-lg">
+        <h3 class="text-xl font-semibold mb-4 text-center">Statistik Layanan</h3>
+        
+        <div class="space-y-3 text-sm text-slate-400">
+          <p class="flex justify-between">
+            <span>VPS Aktif</span>
+            <span>120+</span>
+          </p>
+          <p class="flex justify-between">
+            <span>Support Online</span>
+            <span>24/7</span>
+          </p>
+          <p class="flex justify-between">
+            <span>Uptime Server</span>
+            <span>99.9%</span>
+          </p>
+          <p class="flex justify-between">
+            <span>Data Center</span>
+            <span>Wonosobo</span>
+          </p>
+          <p class="flex justify-between">
+            <span>Backup Harian</span>
+            <span>Ya</span>
+          </p>
+        </div>
+
+        <div class="mt-6 text-center">
+          <span class="text-sm text-slate-500">Layanan kami stabil, aman, dan siap mendukung proyek Anda.</span>
+        </div>
+      </div>
+    </div>
+
+  </div>
+</section>
+
+
+<!-- FEATURES -->
+<section id="features" class="border-t border-slate-800">
+  <div class="max-w-7xl mx-auto px-6 py-24">
+    <h2 class="text-3xl font-bold mb-12">Fitur</h2>
+
+    <div class="grid md:grid-cols-4 gap-10">
+
+      <div class="flex flex-col items-center text-center">
+        <div class="text-4xl text-primary mb-4">
+          <i class="fa-solid fa-microchip"></i>
+        </div>
+        <h3 class="font-semibold text-lg">KVM Virtualization</h3>
+        <p class="text-slate-400 mt-2 text-sm">
+          Memberikan performa hampir setara bare-metal menggunakan virtualisasi Linux KVM. VPS berjalan efisien dan aman dengan overhead minimal, ideal untuk belajar, testing, atau proyek produksi ringan.
+        </p>
+      </div>
+
+      <div class="flex flex-col items-center text-center">
+        <div class="text-4xl text-blue-500 mb-4">
+          <i class="fa-solid fa-network-wired"></i>
+        </div>
+        <h3 class="font-semibold text-lg">VPS NAT</h3>
+        <p class="text-slate-400 mt-2 text-sm">
+          Menggunakan satu IP publik dengan port forwarding yang terkontrol, memungkinkan beberapa VPS mengakses internet dengan aman. Hanya port yang dibutuhkan terbuka, menjamin keamanan dan kemudahan pengelolaan IP.
+        </p>
+      </div>
+
+      <div class="flex flex-col items-center text-center">
+        <div class="text-4xl text-green-500 mb-4">
+          <i class="fa-solid fa-gear"></i>
+        </div>
+        <h3 class="font-semibold text-lg">Automation Ready</h3>
+        <p class="text-slate-400 mt-2 text-sm">
+          Siap digunakan untuk skrip, cron job, bot, atau pipeline CI/CD ringan. VPS terisolasi dengan jaringan stabil dan overhead rendah, membuat otomatisasi dan pengujian alur kerja lebih efisien.
+        </p>
+      </div>
+
+      <div class="flex flex-col items-center text-center">
+        <div class="text-4xl text-yellow-500 mb-4">
+          <i class="fa-solid fa-user-gear"></i>
+        </div>
+        <h3 class="font-semibold text-lg">Engineer Focused</h3>
+        <p class="text-slate-400 mt-2 text-sm">
+          Tanpa gimmick. Bersih, sederhana, dan dapat diprediksi. Fokus pada VPS yang andal, konfigurasi mudah, hasil konsisten, dan performa stabil.
+        </p>
+      </div>
+
+    </div>
+  </div>
+</section>
+
+<!-- PRICING -->
+<section id="pricing" class="border-t border-slate-800">
+  <div class="max-w-7xl mx-auto px-6 py-24">
+
+    <h2 class="text-3xl font-bold mb-12" data-key="pricing_title">Harga VPS NAT</h2>
+
+    <div class="grid md:grid-cols-3 gap-8 items-stretch">
+
+      <!-- Basic -->
+      <div class="border border-slate-800 rounded-xl p-6 hover:shadow-lg transition flex flex-col h-full">
+        <h3 class="font-semibold text-lg">Starter LXC</h3>
+
+        <div class="mt-4 space-y-2">
+          <p class="text-slate-400 flex items-center gap-2">
+            <i class="fa-solid fa-microchip"></i> 1 vCPU
+          </p>
+          <p class="text-slate-400 flex items-center gap-2">
+            <i class="fa-solid fa-memory"></i> 1 GB RAM
+          </p>
+          <p class="text-slate-400 flex items-center gap-2">
+            <i class="fa-solid fa-hard-drive"></i> 10 GB HDD
+          </p>
+        </div>
+
+        <p class="text-slate-400 mt-2">Ideal untuk belajar, skrip ringan, dan bot sederhana.</p>
+
+        <div class="mt-auto">
+          <p class="text-3xl font-bold mt-6">Rp10.000</p>
+          <p class="text-sm text-slate-500">/month</p>
+          <button class="mt-4 w-full bg-primary text-white py-2 rounded hover:bg-blue-700" data-key="order_btn">Pesan Sekarang</button>
+        </div>
+      </div>
+
+      <!-- Standard -->
+<div class="border border-primary rounded-xl p-6 hover:shadow-lg transition flex flex-col h-full relative">
+  <!-- Most Popular Badge -->
+  <div class="absolute -top-3 left-1/2 transform -translate-x-1/2 bg-primary text-white text-xs font-semibold px-3 py-1 rounded-full shadow-lg">
+    Most Popular
+  </div>
+
+  <h3 class="font-semibold text-lg mt-4">Basic KVM</h3>
+
+  <div class="mt-4 space-y-2">
+    <p class="text-slate-400 flex items-center gap-2">
+      <i class="fa-solid fa-microchip"></i> 1 vCPU
+    </p>
+    <p class="text-slate-400 flex items-center gap-2">
+      <i class="fa-solid fa-memory"></i> 2 GB RAM
+    </p>
+    <p class="text-slate-400 flex items-center gap-2">
+      <i class="fa-solid fa-hard-drive"></i> 20 GB NVME
+    </p>
+  </div>
+
+  <p class="text-slate-400 mt-2">Cocok untuk bot, cron job, dan proyek kecil.</p>
+
+  <div class="mt-auto">
+    <p class="text-3xl font-bold mt-6 text-primary">Rp20.000</p>
+    <p class="text-sm text-slate-500">/month</p>
+    <button class="mt-4 w-full bg-primary text-white py-2 rounded hover:bg-blue-700" data-key="order_btn">Pesan Sekarang</button>
+  </div>
+</div>
+
+
+      <!-- Pro -->
+      <div class="border border-slate-800 rounded-xl p-6 hover:shadow-lg transition flex flex-col h-full">
+        <h3 class="font-semibold text-lg">Standard KVM</h3>
+
+        <div class="mt-4 space-y-2">
+          <p class="text-slate-400 flex items-center gap-2">
+            <i class="fa-solid fa-microchip"></i> 2 vCPU
+          </p>
+          <p class="text-slate-400 flex items-center gap-2">
+            <i class="fa-solid fa-memory"></i> 4 GB RAM
+          </p>
+          <p class="text-slate-400 flex items-center gap-2">
+            <i class="fa-solid fa-hard-drive"></i> 50 GB NVME
+          </p>
+        </div>
+
+        <p class="text-slate-400 mt-2">Untuk CI/CD ringan, VPS lebih cepat dan stabil.</p>
+
+        <div class="mt-auto">
+          <p class="text-3xl font-bold mt-6">Rp40.000</p>
+          <p class="text-sm text-slate-500">/month</p>
+          <button class="mt-4 w-full bg-primary text-white py-2 rounded hover:bg-blue-700" data-key="order_btn">Pesan Sekarang</button>
+        </div>
+      </div>
+
+    </div>
+  </div>
+</section>
+
+<!-- OS SUPPORT -->
+<section id="os-support" class="max-w-7xl mx-auto px-6 py-14 text-center">
+  <h2 class="text-3xl font-bold mb-4" data-key="os_title">Sistem Operasi yang Didukung</h2>
+  <p class="text-slate-400 mb-10" data-key="os_text">
+    Pilih OS yang sesuai dengan kebutuhan Anda untuk menjalankan aplikasi dan proyek.
+  </p>
+
+  <!-- OS Buttons -->
+  <div class="flex justify-center flex-wrap gap-4 mb-10 max-w-xl mx-auto">
+    <button onclick="setOS('debian', event)" class="os-btn active p-5 rounded-xl bg-slate-800 hover:bg-primary transition">
+      <i class="fa-brands fa-debian text-2xl"></i>
+    </button>
+    <button onclick="setOS('ubuntu', event)" class="os-btn p-4 rounded-lg bg-slate-800 hover:bg-primary transition">
+      <i class="fa-brands fa-ubuntu text-2xl"></i>
+    </button>
+    <button onclick="setOS('centos', event)" class="os-btn p-4 rounded-lg bg-slate-800 hover:bg-primary transition">
+      <i class="fa-brands fa-centos text-2xl"></i>
+    </button>
+    <button onclick="setOS('windows', event)" class="os-btn p-4 rounded-lg bg-slate-800 hover:bg-primary transition">
+      <i class="fa-brands fa-windows text-2xl"></i>
+    </button>
+    <button onclick="setOS('rhel', event)" class="os-btn p-4 rounded-lg bg-slate-800 hover:bg-primary transition">
+      <i class="fa-brands fa-redhat text-2xl"></i>
+    </button>
+    <button onclick="setOS('suse', event)" class="os-btn p-4 rounded-lg bg-slate-800 hover:bg-primary transition">
+      <i class="fa-brands fa-suse text-2xl"></i>
+    </button>
+  </div>
+
+  <!-- OS Details -->
+  <div class="bg-slate-900 border border-slate-800 rounded-xl p-8 mx-auto max-w-lg flex flex-col">
+    <div class="flex flex-col items-center gap-4 mb-6">
+      <div id="os-icon" class="text-5xl text-primary mb-6">
+        <i class="fa-brands fa-debian"></i>
+      </div>
+      <h3 id="os-name" class="text-2xl font-semibold mb-0">Debian</h3>
+    </div>
+
+    <div class="mb-4 text-left">
+      <div class="flex justify-between text-sm mb-6">
+        <span data-key="os_stability_label">Stability</span>
+        <span id="stability">95%</span>
+      </div>
+      <div class="w-full h-3 bg-slate-800 rounded-full overflow-hidden mb-4">
+        <div id="stability-bar" class="h-full w-[95%] bg-gradient-to-r from-blue-500 to-indigo-500 transition-all"></div>
+      </div>
+    </div>
+
+    <div class="text-left">
+      <div class="flex justify-between text-sm mb-6">
+        <span data-key="os_community_label">Community Support</span>
+        <span id="community">90%</span>
+      </div>
+      <div class="w-full h-3 bg-slate-800 rounded-full overflow-hidden mb-4">
+        <div id="community-bar" class="h-full w-[90%] bg-gradient-to-r from-blue-500 to-indigo-500 transition-all"></div>
+      </div>
+    </div>
+  </div>
+</section>
+
+<!-- SCRIPT OS -->
+<script>
+  const osData = {
+    debian: { name: "Debian", stability: 95, community: 90, icon: "fa-debian" },
+    ubuntu: { name: "Ubuntu", stability: 92, community: 95, icon: "fa-ubuntu" },
+    centos: { name: "CentOS", stability: 90, community: 85, icon: "fa-centos" },
+    windows: { name: "Windows", stability: 85, community: 80, icon: "fa-windows" },
+    rhel: { name: "RHEL", stability: 93, community: 88, icon: "fa-redhat" },
+    suse: { name: "SUSE", stability: 88, community: 80, icon: "fa-suse" }
+  };
+
+function setOS(os, event) {
+  document.querySelectorAll('.os-btn').forEach(btn => btn.classList.remove('active'));
+  event.currentTarget.classList.add('active');
+
+  const data = osData[os];
+  document.getElementById('os-name').textContent = data.name;
+  document.getElementById('stability').textContent = data.stability + '%';
+  document.getElementById('stability-bar').style.width = data.stability + '%';
+  document.getElementById('community').textContent = data.community + '%';
+  document.getElementById('community-bar').style.width = data.community + '%';
+  document.getElementById('os-icon').innerHTML = `<i class="fa-brands ${data.icon}"></i>`;
+}
+
+</script>
+
+
+<!-- FOOTER -->
+<footer id="contact" class="border-t border-slate-800">
+  <div class="max-w-7xl mx-auto px-6 py-10 flex flex-col md:flex-row justify-between text-sm text-slate-500">
+    <div>© 2026 AwanCore</div>
+    <div>support@awancore.github.io</div>
+  </div>
+</footer>
+
+<!-- SCRIPT HAMBURGER -->
+<script>
+  const hamburgerBtn = document.getElementById('hamburgerBtn');
+  const mobileMenu = document.getElementById('mobileMenu');
+
+  hamburgerBtn.addEventListener('click', () => {
+    mobileMenu.classList.toggle('hidden');
+  });
+</script>
+
+</body>
+</html>
