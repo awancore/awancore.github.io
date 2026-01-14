@@ -481,10 +481,10 @@
 <script>
   const osData = {
     debian: { name: "Debian", stability: 95, community: 90, icon: "fa-debian" },
-    ubuntu: { name: "Ubuntu", stability: 92, community: 95, icon: "fa-ubuntu" },
+    ubuntu: { name: "Ubuntu Server", stability: 92, community: 95, icon: "fa-ubuntu" },
     centos: { name: "CentOS", stability: 90, community: 85, icon: "fa-centos" },
-    windows: { name: "Windows", stability: 85, community: 80, icon: "fa-windows" },
-    rhel: { name: "RHEL", stability: 93, community: 88, icon: "fa-redhat" },
+    windows: { name: "Windows Server", stability: 85, community: 80, icon: "fa-windows" },
+    rhel: { name: "Red Hat", stability: 93, community: 88, icon: "fa-redhat" },
     suse: { name: "SUSE", stability: 88, community: 80, icon: "fa-suse" }
   };
 
@@ -506,11 +506,27 @@ function setOS(os, event) {
 
 <!-- FOOTER -->
 <footer id="contact" class="border-t border-slate-800">
-  <div class="max-w-7xl mx-auto px-6 py-10 flex flex-col md:flex-row justify-between text-sm text-slate-500">
+  <div class="max-w-7xl mx-auto px-6 py-10 flex flex-col md:flex-row justify-between items-center text-sm text-slate-500 gap-4">
+
+    <!-- Copyright -->
     <div>© 2026 AwanCore</div>
-    <div>support@awancore.github.io</div>
+
+    <!-- Contact Email: tampil hanya di desktop -->
+    <div class="hidden md:block">support@awancore.github.io</div>
+
+    <!-- Social Links -->
+    <div class="flex gap-4 mt-2 md:mt-0">
+      <a href="https://github.com/awancore" target="_blank" class="hover:text-primary transition">
+        <i class="fab fa-github text-lg"></i>
+      </a>
+      <a href="https://linkedin.com/in/awancore" target="_blank" class="hover:text-primary transition">
+        <i class="fab fa-whatsapp text-lg"></i>
+      </a>
+    </div>
+
   </div>
 </footer>
+
 
 <!-- SCRIPT HAMBURGER -->
 <script>
